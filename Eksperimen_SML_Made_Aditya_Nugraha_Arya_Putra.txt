@@ -1,0 +1,6 @@
+EKSPERIMEN SML - KRITERIA 1
+Made Aditya Nugraha Arya Putra
+
+Repository: https://github.com/Adittt11/Eksperimen_SML_Made_Aditya_Nugraha_Arya_Putra
+Visibility: Public
+Status: Workflow berhasil dijalankan

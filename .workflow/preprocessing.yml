@@ -1,0 +1,51 @@
+name: Automated Preprocessing Workflow
+
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'preprocessing/**'
+      - 'churn_raw.csv'
+  workflow_dispatch:
+
+jobs:
+  preprocessing:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python 3.12.7
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.12.7'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pandas scikit-learn numpy
+
+    - name: Run preprocessing automation
+      run: |
+        python preprocessing/automate_Made_Aditya_Nugraha_Arya_Putra.py
+
+    - name: Upload preprocessed dataset
+      uses: actions/upload-artifact@v3
+      with:
+        name: churn-preprocessed
+        path: churn_preprocessed.csv
+        retention-days: 30
+
+    - name: Commit and push preprocessed data
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add churn_preprocessed.csv
+        git diff --staged --quiet || git commit -m "Update preprocessed dataset [automated]"
+
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: ${{ github.ref }}
